@@ -28,7 +28,9 @@ const App: React.FC = () => {
     if (error || loading) {
         return null;
     }
-    console.log(data);
+    if (data) {
+        console.log(data);
+    }
     return (
         <div className="App">
             <header className="App-header">
