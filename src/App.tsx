@@ -25,6 +25,7 @@ const recipeQuery = gql`
 
 const App: React.FC = () => {
     const { data, error, loading } = useRecipesQuery();
+    //nice
     if (error || loading) {
         return null;
     }
