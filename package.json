@@ -1,47 +1,53 @@
 {
-  "name": "recipeek",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@types/jest": "24.0.12",
-    "@types/node": "11.13.8",
-    "@types/react": "16.8.15",
-    "@types/react-dom": "16.8.4",
-    "apollo-boost": "^0.3.1",
-    "graphql": "^14.2.1",
-    "react": "^16.8.6",
-    "react-apollo": "^2.5.5",
-    "react-apollo-hooks": "^0.4.5",
-    "react-dom": "^16.8.6",
-    "react-scripts": "3.0.0",
-    "typescript": "3.4.5"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "codegen": "graphql-codegen --config codegen.yml"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@graphql-codegen/cli": "^1.1.3",
-    "@graphql-codegen/typescript": "1.1.3",
-    "@graphql-codegen/typescript-operations": "1.1.3",
-    "@graphql-codegen/typescript-react-apollo": "1.1.3"
-  }
+    "name": "recipeek",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@types/jest": "24.0.12",
+        "@types/node": "11.13.8",
+        "@types/react": "16.8.15",
+        "@types/react-dom": "16.8.4",
+        "@types/react-router-dom": "^4.3.2",
+        "@types/styled-components": "^4.1.14",
+        "antd": "^3.16.6",
+        "apollo-boost": "^0.3.1",
+        "graphql": "^14.2.1",
+        "react": "^16.8.6",
+        "react-apollo": "^2.5.5",
+        "react-apollo-hooks": "^0.4.5",
+        "react-dom": "^16.8.6",
+        "react-router-dom": "^5.0.0",
+        "react-scripts": "3.0.0",
+        "styled-components": "^4.2.0",
+        "typescript": "3.4.5"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "prod": "react-scripts build && serve -s build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "codegen": "graphql-codegen --config codegen.yml && echo '/* eslint-disable */' | cat - src/generated/graphql.tsx > temp && mv temp src/generated/graphql.tsx "
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@graphql-codegen/cli": "^1.1.3",
+        "@graphql-codegen/typescript": "1.1.3",
+        "@graphql-codegen/typescript-operations": "1.1.3",
+        "@graphql-codegen/typescript-react-apollo": "1.1.3"
+    }
 }
