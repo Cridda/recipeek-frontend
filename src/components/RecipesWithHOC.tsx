@@ -1,13 +1,12 @@
 import React from 'react';
 import { gql } from 'apollo-boost';
-import { RecipesQuery } from '../generated/graphql';
+import { useRecipesQuery, withRecipes, RecipesProps } from '../generated/graphql';
 import Spinner from './organisms/Spinner';
 import { Icon, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import Meta from 'antd/lib/card/Meta';
 import styled from 'styled-components';
 import { recipeFragment } from './Recipe';
-import { useQuery } from 'react-apollo-hooks';
 
 export const recipesQuery = gql`
     query Recipes {
@@ -18,28 +17,23 @@ export const recipesQuery = gql`
     ${recipeFragment}
 `;
 
-const RecipesWithHooks: React.FC = () => {
-    const { data, error, loading } = useQuery<RecipesQuery>(recipesQuery);
-    if (error || !data) {
+const RecipesWithHOC: React.FC<RecipesProps> = ({ data }) => {
+    if (!data || data.error) {
         return null;
     }
-    if (loading) {
-        return <Spinner />;
+    if (data.loading) {
+        return <Spinner />
     }
-
     return (
         <Container>
-            {data.recipe.map(({ name, photo_url, description, id }) => (
+            {data.recipe && data.recipe.map(({ name, photo_url, description, id }) => (
                 <StyledCard
                     key={id}
                     hoverable
                     cover={
                         <CardImage
                             alt={name}
-                            src={
-                                photo_url ||
-                                'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-                            }
+                            src={photo_url || 'default'}
                         />
                     }
                     actions={[
@@ -59,7 +53,7 @@ const RecipesWithHooks: React.FC = () => {
     );
 };
 
-export default RecipesWithHooks;
+export default withRecipes()(RecipesWithHOC);
 
 const CardImage = styled.img`
     width: 100%;
