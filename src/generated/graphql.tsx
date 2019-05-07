@@ -1686,7 +1686,13 @@ export type User_Variance_Order_By = {
 };
 export type RecipeFragmentFragment = { __typename?: "recipe" } & Pick<
   Recipe,
-  "id" | "description" | "name" | "photo_url" | "url"
+  | "id"
+  | "description"
+  | "name"
+  | "photo_url"
+  | "url"
+  | "cooking_time"
+  | "servings"
 > & {
     recipe_ingredients: Array<
       { __typename?: "recipe_ingredient" } & Pick<
@@ -1701,17 +1707,17 @@ export type RecipeFragmentFragment = { __typename?: "recipe" } & Pick<
     >;
   };
 
-export type RecipesQueryVariables = {};
-
-export type RecipesQuery = { __typename?: "query_root" } & {
-  recipe: Array<{ __typename?: "recipe" } & RecipeFragmentFragment>;
-};
-
 export type RecipeQueryVariables = {
   id: Scalars["Int"];
 };
 
 export type RecipeQuery = { __typename?: "query_root" } & {
+  recipe: Array<{ __typename?: "recipe" } & RecipeFragmentFragment>;
+};
+
+export type RecipesQueryVariables = {};
+
+export type RecipesQuery = { __typename?: "query_root" } & {
   recipe: Array<{ __typename?: "recipe" } & RecipeFragmentFragment>;
 };
 
@@ -1727,6 +1733,8 @@ export const RecipeFragmentFragmentDoc = gql`
     name
     photo_url
     url
+    cooking_time
+    servings
     recipe_ingredients {
       ingredient {
         name
@@ -1736,6 +1744,58 @@ export const RecipeFragmentFragmentDoc = gql`
     }
   }
 `;
+export const RecipeDocument = gql`
+  query Recipe($id: Int!) {
+    recipe(where: { id: { _eq: $id } }, limit: 1) {
+      ...RecipeFragment
+    }
+  }
+  ${RecipeFragmentFragmentDoc}
+`;
+
+export const RecipeComponent = (
+  props: Omit<
+    Omit<ReactApollo.QueryProps<RecipeQuery, RecipeQueryVariables>, "query">,
+    "variables"
+  > & { variables: RecipeQueryVariables }
+) => (
+  <ReactApollo.Query<RecipeQuery, RecipeQueryVariables>
+    query={RecipeDocument}
+    {...props}
+  />
+);
+
+export type RecipeProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<RecipeQuery, RecipeQueryVariables>
+> &
+  TChildProps;
+export function withRecipe<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    RecipeQuery,
+    RecipeQueryVariables,
+    RecipeProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    RecipeQuery,
+    RecipeQueryVariables,
+    RecipeProps<TChildProps>
+  >(RecipeDocument, {
+    alias: "withRecipe",
+    ...operationOptions
+  });
+}
+
+export function useRecipeQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<RecipeQueryVariables>
+) {
+  return ReactApolloHooks.useQuery<RecipeQuery, RecipeQueryVariables>(
+    RecipeDocument,
+    baseOptions
+  );
+}
 export const RecipesDocument = gql`
   query Recipes {
     recipe {
@@ -1785,58 +1845,6 @@ export function useRecipesQuery(
 ) {
   return ReactApolloHooks.useQuery<RecipesQuery, RecipesQueryVariables>(
     RecipesDocument,
-    baseOptions
-  );
-}
-export const RecipeDocument = gql`
-  query Recipe($id: Int!) {
-    recipe(where: { id: { _eq: $id } }) {
-      ...RecipeFragment
-    }
-  }
-  ${RecipeFragmentFragmentDoc}
-`;
-
-export const RecipeComponent = (
-  props: Omit<
-    Omit<ReactApollo.QueryProps<RecipeQuery, RecipeQueryVariables>, "query">,
-    "variables"
-  > & { variables: RecipeQueryVariables }
-) => (
-  <ReactApollo.Query<RecipeQuery, RecipeQueryVariables>
-    query={RecipeDocument}
-    {...props}
-  />
-);
-
-export type RecipeProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<RecipeQuery, RecipeQueryVariables>
-> &
-  TChildProps;
-export function withRecipe<TProps, TChildProps = {}>(
-  operationOptions?: ReactApollo.OperationOption<
-    TProps,
-    RecipeQuery,
-    RecipeQueryVariables,
-    RecipeProps<TChildProps>
-  >
-) {
-  return ReactApollo.withQuery<
-    TProps,
-    RecipeQuery,
-    RecipeQueryVariables,
-    RecipeProps<TChildProps>
-  >(RecipeDocument, {
-    alias: "withRecipe",
-    ...operationOptions
-  });
-}
-
-export function useRecipeQuery(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<RecipeQueryVariables>
-) {
-  return ReactApolloHooks.useQuery<RecipeQuery, RecipeQueryVariables>(
-    RecipeDocument,
     baseOptions
   );
 }
